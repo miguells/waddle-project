@@ -1,6 +1,7 @@
 function loggedOut(req, res, next) {
     if (req.session && req.session.username) {
-        return res.redirect('/');
+        var error = new Error('This is page is not for you! You should not be logged in');
+        return next(error);
     }
     return next();
 }

@@ -16,25 +16,12 @@ db.on('error',console.error.bind(console, 'connection error:'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// serve static files from /public
-app.use(express.static(__dirname + '/public'));
-
 // use sessions for tracking logins
 app.use(session({
   secret: 'frase secreta',
   resave: true,
   saveUninitialized: false
 }));
-
-// make user ID available in templates
-app.use(function (req, res, next) {
-  res.locals.username = req.session.username;
-  next();
-})
-
-// view engine setup
-app.set('view engine', 'pug');
-app.set('views', __dirname + '/views');
 
 // routes
 var routes = require('./routes');
@@ -50,10 +37,9 @@ app.use(function(req, res, next) {
 // error handler
 // define as the last app.use callback
 app.use(function(err, req, res, next) {
+  console.log('Error')
   res.status(err.status || 500);
-  res.render('error', {
-    message: err.message
-  });
+  res.json({error: err.message})
 });
 
 app.listen(3000, function () {
